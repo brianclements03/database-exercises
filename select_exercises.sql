@@ -18,7 +18,8 @@ SHOW CREATE TABLE albums;
 -- 'id'
 
 -- d. What is the oldest release date for any album in the albums table? 
-SELECT release_date
+SELECT Max(release_date) AS 'newest release',
+	   Min(release_date) AS 'oldest release'
 FROM albums;
 -- 1967
 -- What is the most recent release date?
