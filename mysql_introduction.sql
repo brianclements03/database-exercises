@@ -1,4 +1,10 @@
-SELECT * FROM mysql.user;
-select user, host from mysql.user;
-SELECT * FROM mysql.help_topic;
-SELECT help_topic_id, help_category_id, url FROM mysql.help_topic;
+use employees;
+-- This is a comment.
+show tables;
+describe salaries;
+describe dept_emp;
+-- Which table(s) do you think contain a numeric type column? (salaries?)
+describe employees;
+describe departments;
+-- relationship between the above tables? (titles...based on what i see in the relations button above-->titles, employee number)
+show create table dept_manager;
