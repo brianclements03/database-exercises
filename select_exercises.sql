@@ -16,6 +16,8 @@ FROM albums;
 -- c. What is the primary key for the albums table?
 SHOW CREATE TABLE albums;
 -- 'id'
+-- also:
+SELECT KEYS FROM albums WHERE Key_name = 'Primary';
 
 -- d. What is the oldest release date for any album in the albums table? 
 SELECT Max(release_date) AS 'newest release',
@@ -35,8 +37,8 @@ FROM albums WHERE artist = 'Pink Floyd';
 SELECT name,
 	   release_date
 FROM albums
-WHERE name = "Sgt. Pepper's Lonely Hearts Club Band";
--- 1967
+WHERE name = 'Sgt. Pepper\'s Lonely Hearts Club Band';
+-- 1967. take note of the backslash
 
 -- c. The genre for the album Nevermind
 SELECT genre
@@ -45,15 +47,15 @@ WHERE name = "Nevermind";
 -- Grunge, Alternative rock
 
 -- d. Which albums were released in the 1990s
-SELECT name
+SELECT artist, name As 'artist'
 FROM albums
-WHERE `release_date` >= 1990;
+WHERE `release_date`BETWEEN 1990 AND 1999;
 -- see below
 
 -- e. Which albums had less than 20 million certified sales
 SELECT name
 FROM albums
-WHERE sales <= 20000000;
+WHERE sales <= 20;
 -- see below
 -- f. All the albums with a genre of "Rock". Why do these query results not include albums with a genre of "Hard rock" or "Progressive rock"?/*
 SELECT name
