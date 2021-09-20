@@ -16,7 +16,7 @@ SELECT last_name FROM employees WHERE last_name LIKE 'E%';
 -- -------------------------------------------6------------------------------------------------
 SELECT last_name FROM employees WHERE (last_name LIKE 'E%' OR last_name LIKE '%E');
 -- 30723 rows returned
-SELECT last_name FROM employees WHERE last_name LIKE '%E' AND last_name NOT LIKE 'E%';
+SELECT last_name FROM employees WHERE last_name LIKE '%E' AND NOT last_name LIKE 'E%';
 -- 23393 rows returned
 -- -------------------------------------------7------------------------------------------------
 SELECT last_name FROM employees WHERE (last_name LIKE '%E' AND last_name LIKE 'E%');
