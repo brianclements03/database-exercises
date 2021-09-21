@@ -27,8 +27,8 @@ WHERE last_name LIKE 'e%e';
 SELECT upper(concat(first_name, '', last_name)) AS full_name FROM employees 
 WHERE last_name LIKE 'e%e';
 -- 4. ----Find all emp hired in 90s AND born on xmas. Use datediff() to find how many days they've been at the company
-SELECT datediff(curdate(), hire_date) FROM employees WHERE hire_date LIKE '199%' 
-AND birth_date LIKE '%-12-25';
+SELECT first_name, last_name, datediff(curdate(), hire_date) FROM employees 
+WHERE hire_date LIKE '199%' AND birth_date LIKE '%-12-25';
 -- 5. ----Find min and max salary from salaries table
 SELECT min(salary), max(salary) FROM salaries;
 -- 6. ----Generate a username for all emp. All lowercase, 1st char of 
