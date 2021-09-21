@@ -19,6 +19,6 @@ What is the relationship between OFFSET (number of results to skip),
 LIMIT (number of results per page), and the page number?*/
 SELECT * FROM employees WHERE birth_date LIKE '%-12-25' 
 AND hire_date BETWEEN '1990-01-01' AND '1999-12-31' ORDER BY hire_date LIMIT 5 
-OFFSET 50;
+OFFSET 45;
 SELECT * FROM employees WHERE birth_date LIKE '%-12-25' 
-AND hire_date BETWEEN '1990-01-01' AND '1999-12-31' ORDER BY hire_date LIMIT 50,5;
+AND hire_date BETWEEN '1990-01-01' AND '1999-12-31' ORDER BY hire_date LIMIT 45,5;
