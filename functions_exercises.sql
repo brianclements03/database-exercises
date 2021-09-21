@@ -34,5 +34,5 @@ SELECT min(salary), max(salary) FROM salaries;
 -- 6. ----Generate a username for all emp. All lowercase, 1st char of 
 -- first_name, 1st 4 char last_name, "_", birth month, last 2 digs of birth year
 SELECT lower(concat(substr(first_name,1,1), substr(last_name,1,4), '_', 
-substr(birth_date,6,2), substr(birth_date,3,2))) AS user_name FROM employees;
-SELECT substr(birth_date,3,2) FROM employees;
+substr(birth_date,6,2), substr(birth_date,3,2))) AS user_name, first_name, last_name, birth_date FROM employees;
+

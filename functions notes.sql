@@ -19,6 +19,8 @@ FROM employees;
 SELECT avg(salary) FROM salaries; SELECT max(salary) FROM salaries;
 SELECT max(salary) - min(salary) AS range_from_min_to_max FROM salaries;
 
+SELECT * FROM employees.salaries;
+
 -- CASTING---------------------
 SELECT
     1 + '4ef',
