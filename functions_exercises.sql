@@ -30,9 +30,11 @@ WHERE last_name LIKE 'e%e';
 SELECT first_name, last_name, datediff(curdate(), hire_date) FROM employees 
 WHERE hire_date LIKE '199%' AND birth_date LIKE '%-12-25';
 -- 5. ----Find min and max salary from salaries table
-SELECT min(salary), max(salary) FROM salaries;
+SELECT min(salary), max(salary) FROM salaries
+WHERE to_date > curdate();
 -- 6. ----Generate a username for all emp. All lowercase, 1st char of 
 -- first_name, 1st 4 char last_name, "_", birth month, last 2 digs of birth year
 SELECT lower(concat(substr(first_name,1,1), substr(last_name,1,4), '_', 
-substr(birth_date,6,2), substr(birth_date,3,2))) AS user_name, first_name, last_name, birth_date FROM employees;
+substr(birth_date,6,2), substr(birth_date,3,2))) AS user_name, 
+first_name, last_name, birth_date FROM employees;
 
