@@ -35,7 +35,7 @@ SELECT emp_no, avg(salary) FROM salaries
 GROUP BY emp_no;
 -- Find current avg salary for each emp
 SELECT emp_no, avg(salary) FROM salaries WHERE to_date LIKE '9999%'
-GROUP BY emp_no, salary; #review this further (including/excluding emp_no in select and in group by)
+GROUP BY emp_no; #review this further (including/excluding emp_no in select and in group by)
 -- Max salary for each current emp
 SELECT emp_no, max(salary) FROM salaries WHERE to_date LIKE '9999%'
 GROUP BY emp_no, salary; #not 100% sure this is right.  is this the max across all salaries for current emp?
