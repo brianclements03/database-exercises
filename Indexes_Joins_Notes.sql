@@ -46,7 +46,7 @@ LEFT JOIN users ON users.role_id = roles.id;#RIGHT JOIN REWRITTEN AS A LEFT JOIN
 #different depts over time-->think 'MANY TO MANY'
 SELECT CONCAT(e.first_name, ' ', e.last_name) AS full_name, d.dept_name#return full name and dept name
 FROM employees AS e #working w employees table
-JOIN dept_emp AS de #NOTE THE ALIASING which works within the query
+JOIN dept_emp AS de #NOTE THE ALIASING which works 
   ON de.emp_no = e.emp_no #joining employees w dept_emp on the emp_no relationship
 JOIN departments AS d
   ON d.dept_no = de.dept_no#join departments on the dept_no relationship
