@@ -59,3 +59,26 @@ JOIN employees e using(emp_no)
 JOIN salaries s using(emp_no)
 WHERE dm.to_date > now()
 ORDER BY salary DESC LIMIT 1;
+-- 10. BONUS Find the names of all current employees, their department name, and their current manager's name.
+SELECT concat(e.first_name,' ',e.last_name) AS 'Employee Name', dept_name AS 'Department Name', concat(e2.first_name,' ',e2.last_name) AS 'Manager Name'
+FROM employees e
+JOIN dept_emp de using(emp_no)
+JOIN dept_manager dm using(dept_no)
+JOIN departments d using(dept_no)
+JOIN employees e2 ON e2.emp_no = dm.emp_no
+WHERE de.to_date > NOW() AND dm.to_date > NOW();
+-- 11. BONUS Who is the highest paid employee within each department.
+SELECT dept_name, e.first_name, e.last_name, salary
+FROM employees e
+JOIN salaries sa using(emp_no)
+JOIN dept_emp de using(emp_no)
+JOIN departments d using(dept_no)
+WHERE salary IN 
+	(select MAX(salary)
+    FROM salaries s
+    join employees e using(emp_no)
+    join dept_emp de using(emp_no)
+    join departments using(dept_no)
+    where s.to_date > now()
+    and de.to_date > now()
+    group by dept_name);
