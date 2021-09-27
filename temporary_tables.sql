@@ -14,3 +14,5 @@ SELECT first_name, last_name, dept_name
 FROM employees 
 JOIN dept_emp USING(emp_no)
 JOIN departments USING(dept_no);
+-- 1.a.Add a column named full_name to this table. It should be a VARCHAR whose length is the sum of the lengths of the first name 
+-- and last name columns

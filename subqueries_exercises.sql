@@ -3,22 +3,33 @@ USE employees;
 SELECT * 
 FROM employees
 JOIN dept_emp de using(emp_no)
-WHERE hire_date = (
+WHERE hire_date = 
+	(
     SELECT hire_date
     FROM employees
-    WHERE emp_no = 101010)
+    WHERE emp_no = 101010
+	)
     AND to_date > now();
 -- 2.Find all the titles ever held by all current employees with the first name Aamod.
-SELECT first_name, title FROM titles t
+SELECT DISTINCT title FROM titles t
 JOIN employees e using(emp_no)
 WHERE to_date > now() 
 AND first_name = (
-	SELECT (first_name)
+	SELECT first_name
 	FROM employees
 	WHERE first_name = 'Aamod'
 	GROUP BY first_name);
 -- 3.How many people in the employees table are no longer working for the company? Give the answer in a comment in your code.
 -- answer: 85108
+SELECT *
+FROM employees
+WHERE emp_no NOT IN
+	(
+	SELECT emp_no
+    FROM dept_emp
+    WHERE to_date > now()
+    );
+-- THIS ^^ is the correct answer
 SELECT COUNT(*)
 FROM employees e
 WHERE emp_no IN (
@@ -52,7 +63,7 @@ WHERE s.to_date > now()
     );
 -- 6.How many current salaries are within 1 standard deviation of the current highest salary? (Hint: you can use a built in function 
 -- to calculate the standard deviation.) What percentage of all salaries is this?
-SELECT count(*) as 'number salaries', count(*)/((SELECT count(*) FROM salaries WHERE to_date > now())) AS 'percent of total'
+SELECT count(*) as 'number salaries', count(*)/(SELECT count(*) FROM salaries WHERE to_date > now()) AS 'percent of total'
 FROM salaries s
 WHERE to_date > now()
 AND salary >= 
