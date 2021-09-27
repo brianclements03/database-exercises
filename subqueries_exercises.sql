@@ -45,7 +45,8 @@ SELECT *
 FROM employees e 
 JOIN salaries s using(emp_no)
 WHERE s.to_date > now()
-	AND s.salary > (
+	AND s.salary > 
+    (
 	SELECT avg(salary)
     FROM salaries s2
     );
@@ -54,14 +55,14 @@ WHERE s.to_date > now()
 SELECT count(*) as 'number salaries', count(*)/((SELECT count(*) FROM salaries WHERE to_date > now())) AS 'percent of total'
 FROM salaries s
 WHERE to_date > now()
-	AND salary >= 
-		(
-		SELECT max(salary) 
-        FROM salaries
-        WHERE to_date > now()
-        ) 
-        - 
-        (
+AND salary >= 
+	(
+	SELECT max(salary) 
+	FROM salaries
+	WHERE to_date > now()
+	) 
+	- 
+	(
 	SELECT stddev(salary)
     FROM salaries s2
     WHERE to_date > now()
