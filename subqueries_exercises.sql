@@ -51,22 +51,79 @@ WHERE s.to_date > now()
     );
 -- 6.How many current salaries are within 1 standard deviation of the current highest salary? (Hint: you can use a built in function 
 -- to calculate the standard deviation.) What percentage of all salaries is this?
-SELECT count(*) as 'number salaries', round('number salaries'/count(salary),5) AS 'percent of total'
+SELECT count(*) as 'number salaries', count(*)/((SELECT count(*) FROM salaries WHERE to_date > now())) AS 'percent of total'
 FROM salaries s
 WHERE to_date > now()
-	AND salary >= (SELECT max(salary) FROM salaries) - (
+	AND salary >= 
+		(
+		SELECT max(salary) 
+        FROM salaries
+        WHERE to_date > now()
+        ) 
+        - 
+        (
 	SELECT stddev(salary)
     FROM salaries s2
     WHERE to_date > now()
     );
+-- -----------------------------------BONUS---------------------------------------------
+-- 1.Find all the department names that currently have female managers.
+SELECT dept_name
+FROM departments d
+WHERE dept_no IN 
+	(
+    SELECT dept_no
+	FROM dept_emp de
+	WHERE to_date > now()
+    AND emp_no IN 
+		(
+        SELECT emp_no
+		FROM employees e
+        WHERE gender = 'F'
+        )
+	)
+;
+-- 2.Find the first and last name of the employee with the highest salary.
+SELECT first_name, last_name, emp_no
+FROM employees e
+WHERE emp_no IN
+	(SELECT emp_no
+    FROM salaries
+    WHERE salary IN 
+		(
+        SELECT max(salary)
+        FROM salaries
+        WHERE to_date > now()
+        )
+	);
     
+-- 3.Find the department name that the employee with the highest salary works in.
+SELECT dept_name
+FROM departments
+WHERE dept_no IN
+	(SELECT dept_no
+	FROM departments
+    WHERE dept_no IN
+		(SELECT dept_no
+		FROM dept_emp
+        WHERE emp_no IN
+			(
+            SELECT emp_no
+			FROM salaries
+			WHERE salary IN 
+				(
+				SELECT max(salary)
+				FROM salaries
+				WHERE to_date > now()
+				)
+			)
+		)
+	);
     
-SELECT 83 / round(count(salary),10)
-FROM salaries s
-WHERE to_date > now();
-    
->
-select 83/240000 from salaries;
-    
- 
-		
+-- the following lines are just to confirm--------
+SELECT *
+FROM dept_emp
+WHERE emp_no = 43624;
+SELECT dept_name
+FROM departments
+WHERE dept_no = 'd007';
