@@ -55,36 +55,40 @@ UPDATE temp_payment_table SET amount = amt_in_cents;
 -- 3.Find out how the current average pay in each department compares to the overall, historical average pay. In order to make the comparison 
 -- easier, you should use the Z-score for salaries. In terms of salary, what is the best department right now to work for? The worst?
 USE employees;
+-- Create current avg salary table by departments
 CREATE TABLE hopper_1563.curr_avg_sal AS
-SELECT dept_name AS Department, avg(salary) AS 'Mean_Salary'
+SELECT dept_name AS Department, avg(salary) AS 'Dept_Mean_Salary'
 FROM salaries
 JOIN dept_emp ON dept_emp.emp_no = salaries.emp_no
 JOIN departments ON departments.dept_no = dept_emp.dept_no
 WHERE salaries.to_date > now()
 GROUP BY dept_name;
+-- create table for historical avg salary and historical std deviation
+CREATE TABLE hopper_1563.hist_data AS
+SELECT avg(salary) AS Avg_Hist_Sal, stddev(salary) AS Hist_Std_Dev
+FROM salaries;
 
 USE hopper_1563;
 SELECT * FROM curr_avg_sal;
+SELECT * FROM hist_data;
+SELECT * FROM curr_hist;
+-- create table to join data as current and historical
+CREATE TEMPORARY TABLE hopper_1563.curr_hist AS
+SELECT * FROM curr_avg_sal
+JOIN hist_data;
 
-SELECT Mean_Salary, 
-    (Mean_Salary - (SELECT AVG(Mean_Salary) FROM curr_avg_sal)) 
+-- CREATE YOUR ZSCORE TABLE
+-- CREATE TABLE hopper_1563.zscore AS
+SELECT *,
+    (
+    (Dept_Mean_Salary - Avg_Hist_Sal)
     / 
-    (SELECT stddev(Mean_Salary) FROM curr_avg_sal) AS zscore
-FROM curr_avg_sal;
-
-CREATE TABLE hopper_1563.zscore AS
-SELECT Department, Mean_Salary, 
-    (Mean_Salary - (SELECT AVG(Mean_Salary) FROM curr_avg_sal)) 
-    / 
-    (SELECT stddev(Mean_Salary) FROM curr_avg_sal) AS zscore
-FROM curr_avg_sal;
+    (Hist_Std_Dev) 
+    ) AS zscore
+FROM curr_hist
+ORDER BY zscore DESC;
 
 SELECT * FROM zscore;
-    
-CREATE TEMPORARY TABLE hopper_1563.table3 AS
-SELECT Department, curr_avg_sal.Mean_salary, zscore FROM curr_avg_sal
-JOIN zscore USING(Department);
 
-SELECT * FROM table3;
 
 
