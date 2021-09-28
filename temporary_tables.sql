@@ -62,6 +62,7 @@ FROM salaries
 JOIN dept_emp ON dept_emp.emp_no = salaries.emp_no
 JOIN departments ON departments.dept_no = dept_emp.dept_no
 WHERE salaries.to_date > now()
+AND dept_emp.to_date > now()
 GROUP BY dept_name;
 -- create table for historical avg salary and historical std deviation
 CREATE TABLE hopper_1563.hist_data AS
@@ -87,8 +88,6 @@ SELECT *,
     ) AS zscore
 FROM curr_hist
 ORDER BY zscore DESC;
-
-SELECT * FROM zscore;
 
 
 
