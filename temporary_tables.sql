@@ -79,7 +79,7 @@ SELECT * FROM curr_avg_sal
 JOIN hist_data;
 
 -- CREATE YOUR ZSCORE TABLE
--- CREATE TABLE hopper_1563.zscore AS
+-- here's how i display the zscore with all other fields
 SELECT *,
     (
     (Dept_Mean_Salary - Avg_Hist_Sal)
@@ -91,10 +91,11 @@ ORDER BY zscore DESC;
 
 SELECT * FROM curr_hist;
 
+-- here, i add a field to the curr_hist temp table and name it zscore
 ALTER TABLE hopper_1563.curr_hist ADD zscore FLOAT;
 SELECT * FROM curr_hist;
 
-
+-- here is where i define the content of the zscore field and display my final result
 UPDATE curr_hist SET zscore = (
     (Dept_Mean_Salary - Avg_Hist_Sal)
     / 
