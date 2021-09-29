@@ -89,5 +89,17 @@ SELECT *,
 FROM curr_hist
 ORDER BY zscore DESC;
 
+SELECT * FROM curr_hist;
 
+ALTER TABLE hopper_1563.curr_hist ADD zscore FLOAT;
+SELECT * FROM curr_hist;
+
+
+UPDATE curr_hist SET zscore = (
+    (Dept_Mean_Salary - Avg_Hist_Sal)
+    / 
+    (Hist_Std_Dev) 
+    );
+SELECT * FROM curr_hist
+ORDER BY zscore DESC;
 
