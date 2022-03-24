@@ -21,7 +21,8 @@ GROUP BY last_name;
 -- 7. Find emps w 1st name Irena/Vidya/Maya. Use count(*) and group by to find # emp for each gender w those names.
 SELECT first_name, count(*), gender FROM employees
 GROUP BY first_name, gender
-HAVING first_name IN ('Irena','Vidya','Maya');
+HAVING first_name IN ('Irena','Vidya','Maya')
+ORDER BY first_name DESC;
 -- 8. Using the query ^ that generated a username, generate a count employees for each username. Are there duplicates? (bonus: have many duplicate usernames?)
 SELECT lower(concat(substr(first_name,1,1), substr(last_name,1,4), '_', 
 substr(birth_date,6,2), substr(birth_date,3,2))) AS user_name, COUNT(*) FROM employees

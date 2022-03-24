@@ -7,7 +7,8 @@ DESCRIBE albums;
 SELECT *
 FROM albums;
 -- 31 rows
-
+SELECT COUNT(*)
+FROM albums;
 -- b. How many unique artist names are in the albums table?
 SELECT DISTINCT artist
 FROM albums;
