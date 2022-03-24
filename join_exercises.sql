@@ -26,6 +26,17 @@ GROUP BY roles.name;
 USE employees;
 -- 2. Using the example in the Associative Table Joins section as a guide, write a query that 
 -- shows each department along with the name of the current manager for that department.
+SELECT d.dept_name, concat(e.first_name,' ',e.last_name) AS 'Manager'
+FROM departments d
+JOIN dept_emp de on d.dept_no = de.dept_no
+JOIN employees e on e.emp_no = de.emp_no
+JOIN dept_manager dm on dm.emp_no = e.emp_no
+WHERE dm.to_date > NOW()
+ORDER BY d.dept_name;
+--  there's a superfluous join, but the answer is right.
+-- in other words, not bad
+
+
 SELECT departments.dept_name AS 'Department Name', 
 CONCAT(employees.first_name, ' ', employees.last_name) AS 'Department Manager' FROM employees
 JOIN dept_manager ON dept_manager.emp_no = employees.emp_no
@@ -33,13 +44,35 @@ JOIN departments on departments.dept_no = dept_manager.dept_no
 WHERE dept_manager.to_date > NOW()
 ORDER BY departments.dept_name; 
 -- 3.  Find the name of all departments currently managed by women.
+SELECT departments.dept_name AS 'Dept Name',
+CONCAT (employees.first_name, ' ',employees.last_name) AS 'Dept Mgr'
+FROM employees
+JOIN dept_manager ON dept_manager.emp_no = employees.emp_no
+JOIN departments on departments.dept_no = dept_manager.dept_no
+WHERE dept_manager.to_date > NOW() AND employees.gender = 'F'
+ORDER BY departments.dept_name;
+
+
 SELECT departments.dept_name AS 'Department Name', 
 CONCAT(employees.first_name, ' ', employees.last_name) AS 'Department Manager' FROM employees
 JOIN dept_manager ON dept_manager.emp_no = employees.emp_no
 JOIN departments on departments.dept_no = dept_manager.dept_no
 WHERE dept_manager.to_date > NOW() AND employees.gender = 'F'
 ORDER BY departments.dept_name; 
--- 4. Find the current titles of employees currently working in the Customer Service department
+-- 4. Find the current titles of employees currently working 
+-- in the Customer Service department
+SELECT t.title, COUNT(t.title)
+FROM titles t 
+RIGHT JOIN employees e ON e.emp_no = t.emp_no
+JOIN dept_emp de ON de.emp_no = t.emp_no
+JOIN departments d ON d.dept_no = de.dept_no
+WHERE d.dept_name = 'Customer Service'
+AND de.to_date > now() AND t.to_date > now()
+GROUP BY Title;
+
+
+
+
 SELECT titles.title AS Title, count(titles.title) 
 FROM titles
 RIGHT JOIN employees ON employees.emp_no = titles.emp_no
@@ -49,6 +82,16 @@ WHERE departments.dept_name = 'Customer Service'
 AND dept_emp.to_date > now() AND titles.to_date > now()
 GROUP BY Title;
 -- 5. Find the current salary of all current managers.
+SELECT CONCAT(e.first_name,' ',e.last_name), s.salary
+FROM employees e
+JOIN salaries s ON s.emp_no = e.emp_no
+JOIN dept_manager dm ON dm.emp_no = e.emp_no
+WHERE dm.to_date > NOW() AND s.to_date > NOW()
+ORDER BY s.salary DESC;
+-- this answers the question just fine
+-- in the previous answer, you had done a little more work and gotten the dept name too
+
+
 SELECT d.dept_name, CONCAT(e.first_name, ' ', e.last_name) AS 'Department Manager', s.salary
 FROM departments AS d
 JOIN dept_emp AS de ON d.dept_no = de.dept_no
@@ -60,6 +103,15 @@ AND s.to_date > NOW()
 ORDER BY d.dept_name;
 
 -- 6. Find the number of current employees in each department.
+SELECT d.dept_name, COUNT(*)
+FROM departments d
+JOIN dept_emp de ON de.dept_no = d.dept_no
+JOIN employees e ON e.emp_no = de.emp_no
+WHERE de.to_date > NOW()
+GROUP BY d.dept_name;
+-- good work, only forgot the CURRENT EMPLOYEES constraint, easy fix
+-- also, in the below answer, you had included dept no. 
+
 SELECT d.dept_no, d.dept_name, count(*) FROM departments AS d
 JOIN dept_emp AS de using(dept_no)
 JOIN employees AS e using(emp_no)
