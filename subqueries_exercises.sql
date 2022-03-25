@@ -107,11 +107,22 @@ WHERE emp_no IN (
 	FROM dept_emp
     WHERE to_date < now()
     );
--- 4.Find all the current department managers that are female. List their names in a comment in your code.
+-- 4.Find all the current department managers that are female. 
+-- List their names in a comment in your code.
 /*'Isamu','Legleitner'
 'Karsten','Sigstam'
 'Leon','DasSarma'
 'Hilary','Kambil'*/
+SELECT CONCAT(e.first_name,' ',e.last_name)
+FROM employees e
+WHERE e.emp_no IN 
+	(
+    SELECT emp_no 
+    FROM dept_manager dm
+    WHERE to_date > NOW()
+    )
+AND e.gender = 'F';
+-- great job, got it on the first shot
 SELECT first_name, last_name
 FROM dept_manager dm
 JOIN employees e using(emp_no)
@@ -121,7 +132,22 @@ AND emp_no IN (
     FROM employees
     WHERE gender = 'F'	 
     );
--- 5.Find all the employees who currently have a higher salary than the companies overall, historical average salary.
+-- 5.Find all the employees who currently have a higher salary than the 
+-- companies overall, historical average salary.
+SELECT *, s.salary
+FROM employees e
+JOIN salaries s 
+WHERE s.to_date > NOW()
+AND s.salary >
+	(
+    SELECT AVG(salary)
+    FROM salaries
+    )
+    ;
+-- not great. could have recognized the scalar subquery.
+SELECT AVG(salary)
+FROM salaries;
+-- this is the scalar ^^
 SELECT *
 FROM employees e 
 JOIN salaries s using(emp_no)
@@ -131,8 +157,32 @@ WHERE s.to_date > now()
 	SELECT avg(salary)
     FROM salaries s2
     );
--- 6.How many current salaries are within 1 standard deviation of the current highest salary? (Hint: you can use a built in function 
--- to calculate the standard deviation.) What percentage of all salaries is this?
+-- 6.How many current salaries are within 1 standard deviation of the current highest salary? 
+-- (Hint: you can use a built in function to calculate the standard deviation.) 
+-- What percentage of all salaries is this?
+SELECT COUNT(*) AS 'number_o_salaries', COUNT(*)/(SELECT COUNT(*) FROM salaries WHERE to_date > NOW()) as 'percent_o_total'
+FROM salaries s 
+WHERE to_date > NOW()
+AND salary >=
+	(
+    SELECT MAX(salary)
+    FROM salaries s2
+    WHERE to_date > NOW()
+    )
+    -
+    (
+    SELECT STDDEV(salary)
+    FROM salaries s3
+	WHERE to_date > NOW()
+    )
+    ;
+    -- very tough one, not bad but not great. 
+    -- attempt with multiple positions for the parentheses, it's what caught you up a few mins
+    
+SELECT STDDEV(salary)
+FROM salaries s2;
+-- the std dev scalar subquery
+
 SELECT count(*) as 'number salaries', count(*)/(SELECT count(*) FROM salaries WHERE to_date > now()) AS 'percent of total'
 FROM salaries s
 WHERE to_date > now()
@@ -150,6 +200,22 @@ AND salary >=
     );
 -- -----------------------------------BONUS---------------------------------------------
 -- 1.Find all the department names that currently have female managers.
+SELECT dept_name
+FROM departments d
+WHERE d.dept_no IN
+	(
+    SELECT de.dept_no
+    FROM dept_emp de
+    WHERE de.emp_no IN
+		(
+        SELECT e.emp_no
+        FROM employees e
+        WHERE e.gender = 'F'
+        )
+	)
+    ;
+-- Great job getting that on the first try :: ))
+
 SELECT dept_name
 FROM departments d
 WHERE dept_no IN 
@@ -180,6 +246,9 @@ WHERE emp_no IN
 	);
     
 -- 3.Find the department name that the employee with the highest salary works in.
+
+
+
 SELECT dept_name
 FROM departments
 WHERE dept_no IN
