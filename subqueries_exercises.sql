@@ -79,8 +79,18 @@ AND first_name = (
 	FROM employees
 	WHERE first_name = 'Aamod'
 	GROUP BY first_name);
--- 3.How many people in the employees table are no longer working for the company? Give the answer in a comment in your code.
+-- 3.How many people in the employees table are no longer working for the company? 
+-- Give the answer in a comment in your code.
 -- answer: 85108
+SELECT COUNT(*)
+FROM employees e
+WHERE emp_no IN 
+	(
+    SELECT emp_no
+    FROM dept_emp
+    WHERE to_date < NOW()
+    );
+-- Took a try or two, but you got it : )
 SELECT *
 FROM employees
 WHERE emp_no NOT IN
@@ -89,7 +99,7 @@ WHERE emp_no NOT IN
     FROM dept_emp
     WHERE to_date > now()
     );
--- THIS ^^ is the correct answer
+-- THIS vv is the correct answer
 SELECT COUNT(*)
 FROM employees e
 WHERE emp_no IN (
