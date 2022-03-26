@@ -245,3 +245,12 @@ WHERE film_id IN
 	);
 -- NOT THE CORRECT ANSWER....still
  
+ 
+ 
+ 
+ 
+-- The following is an example of a lag function. notice the OVER() piece
+SELECT *,
+LAG(hire_date, 1,'1999-09-01') OVER(
+ORDER BY hire_date ASC) AS EndDate
+FROM employees;
