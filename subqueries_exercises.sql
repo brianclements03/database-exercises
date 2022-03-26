@@ -246,9 +246,31 @@ WHERE emp_no IN
 	);
     
 -- 3.Find the department name that the employee with the highest salary works in.
-
-
-
+SELECT d.dept_name
+FROM departments d
+WHERE d.dept_no in
+	(
+    SELECT d.dept_no
+    FROM departments d
+    WHERE d.dept_no IN
+		(
+		SELECT de.dept_no
+		FROM dept_emp de
+		WHERE de.emp_no IN
+			(
+			SELECT s.emp_no
+			FROM salaries s
+			WHERE s.salary IN
+				(
+				SELECT max(s.salary)
+				FROM salaries s
+                WHERE to_date > NOW()
+				)
+			)
+		)
+	)
+;
+-- took a while, but slwoly got there : /
 SELECT dept_name
 FROM departments
 WHERE dept_no IN
@@ -283,7 +305,8 @@ WHERE dept_no = 'd007';
 
 
 
--- Here, I'm building up my columns and values before I group by departments and use an aggregate function to get a count of values in each column.
+-- Here, I'm building up my columns and values before I group by departments 
+-- and use an aggregate function to get a count of values in each column.
 SELECT
     dept_name,
     CASE WHEN title = 'Senior Engineer' THEN title ELSE NULL END AS 'Senior Engineer',
@@ -297,7 +320,9 @@ FROM departments
 JOIN dept_emp USING(dept_no)
 JOIN titles USING(emp_no);
 
--- Next, I add my GROUP BY clause and COUNT function to get a count of all employees who have historically ever held a title by department. (I'm not filtering for current employees or current titles.)
+-- Next, I add my GROUP BY clause and COUNT function to get a count of all employees 
+-- who have historically ever held a title by department. 
+-- (I'm not filtering for current employees or current titles.)
 SELECT
     dept_name,
     COUNT(CASE WHEN title = 'Senior Engineer' THEN title ELSE NULL END) AS 'Senior Engineer',
